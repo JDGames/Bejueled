@@ -76,9 +76,9 @@ public class BubbleMatrix  extends JFrame{
 		 boolean bottom;
 		 
 		this.setLayout(new GridLayout(size, size));
-		//itterate trhough the row
+		//Iterate through the row
 		for( int i = 0; i< size; i++){
-			//determine wether the bubble is at the far side of the matrix
+			//determine whether the bubble is at the far side of the matrix
 			top = false;
 			bottom = false;
 			if(i ==0){//top case
@@ -90,7 +90,7 @@ public class BubbleMatrix  extends JFrame{
 			
 			//initialize the array in which the column will be placed
 			ArrayList<BubbleButton> array = new ArrayList<BubbleButton>();
-			//itterate through the column
+			//Iterate through the column
 			for( int j = 0; j < size; j++){
 				//determine top and bottom locations
 				leftmost = false;
@@ -128,10 +128,10 @@ public class BubbleMatrix  extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			Point loc = ((BubbleButton) e.getSource()).getLocation();
 			Color color = matrix.get((int)loc.getX()).get((int)loc.getY()).getBubble().getColor();
-			markBubbles(loc, color);
-			deleteBubbles();
+			//markBubbles(loc, color);
+			//deleteBubbles();
 			
-			
+			selectBubble((BubbleButton) e.getSource());
 		}
 		
 	}
@@ -346,6 +346,49 @@ public class BubbleMatrix  extends JFrame{
 	
 		
 		return  exclude.toArray( new Color[exclude.size()]);
+	}
+	
+	public void selectBubble(BubbleButton selected) {
+		// If the bubble is not selected, select it. If it is selected, deselect it and do nothing
+		selected.getBubble().selected();
+		if(selected.getBubble().getSelect()) {
+			BubbleButton temp;
+			for(int i=0; i < size; i++) {
+				for(int j=0; j < size; j++) {
+					temp = matrix.get(i).get(j);
+					if((temp != selected) && (temp.getBubble().getSelect())) {
+						temp.getBubble().selected();
+						selected.getBubble().selected();
+						if(isAdjacent(selected,temp)) {
+							swap(selected,temp);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Takes the two BubbleButtons b1 and b2 and swaps them.
+	 * @param b1
+	 * @param b2
+	 */
+	public void swap(BubbleButton b1, BubbleButton b2) {
+		BubbleButton temp1 = new BubbleButton(b1);
+		BubbleButton temp2 = new BubbleButton(b2);
+		
+		// Swaps the two bubbles
+		b1.setBackground(temp2.getBackground());
+		b2.setBackground(temp1.getBackground());
+		b1.setBubble(new Bubble(temp2.getBubble()));
+		b2.setBubble(new Bubble(temp1.getBubble()));
+	}
+
+	public boolean isAdjacent(BubbleButton b1, BubbleButton b2) {
+		int x = Math.abs(b1.getLocation().x - b2.getLocation().x);
+		int y = Math.abs(b1.getLocation().y - b2.getLocation().y);
+		return (((x == 1) && (y == 0)) || ((x == 0) && (y == 1)));
 	}
 
 	/**

@@ -9,7 +9,7 @@ public class Bubble {
 	private boolean leftmost;//...
 	private boolean rightmost;//...
 	private boolean bottom;
-	
+	private boolean select = false;
 	
 	/**
 	 * @param color
@@ -132,6 +132,14 @@ public class Bubble {
 		this.rightmost = rightmost;
 	}
 
+	public boolean selected() {
+		select = !select;
+		return select;
+	}
+	
+	public boolean getSelect() {
+		return select;
+	}
 
 	/**
 	 * used when no color is assigned

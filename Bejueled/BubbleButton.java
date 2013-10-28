@@ -33,6 +33,13 @@ public class BubbleButton extends JButton{
 		setBackground(color);
 	}
 	
+	public BubbleButton(BubbleButton b) {
+		super(Integer.toString(counter));
+		bubble = new Bubble(b.getBubble());
+		location = new Point(b.getLocation());
+		setBackground(b.getBubble().getColor());
+	}
+	
 	/**
 	 * general use constructor, lets the bubble choose its own color
 	 * @param top
